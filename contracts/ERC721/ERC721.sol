@@ -97,7 +97,7 @@ contract MyERC721 {
         address from,
         uint256 tokenId,
         bytes memory data
-    ) internal returns (bool) {
+    ) internal returns (bool isChecked) {
         if (to.code.length > 0) {
             if (to.code.length > 0) {
                 try
