@@ -99,14 +99,22 @@ contract MyERC721 {
         bytes memory data
     ) internal returns (bool) {
         if (to.code.length > 0) {
-            IERC721Receiver(to).onERC721Received(
-                msg.sender,
-                from,
-                tokenId,
-                data
-            );
+            if (to.code.length > 0) {
+                try
+                    IERC721Receiver(to).onERC721Received(
+                        to,
+                        from,
+                        tokenId,
+                        data
+                    )
+                returns (bytes4 response) {
+                    isChecked = (response !=
+                        IERC721Receiver.onERC721Received.selector);
+                } catch {
+                    isChecked = false;
+                }
+            }
         }
-        return true;
     }
 
     function _isTokenExists(uint256 token) internal view returns (bool) {
